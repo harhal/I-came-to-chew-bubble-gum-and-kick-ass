@@ -25,7 +25,7 @@ namespace Core
             var gridMovement = GetComponent<GridMovement>();
             if (gridMovement)
             {
-                GridOccupation.Free(gridMovement.GridPosition);
+                GridOccupation.Free(gridMovement.gridPosition);
             }
         }
 

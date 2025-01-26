@@ -11,7 +11,7 @@ namespace Enemies
                 for (int i = 1; i < 4; i++)
                 {
                     GridMovement.GridDirection direction = (GridMovement.GridDirection)d;
-                    if (PlayerGridMovement.GridPosition ==
+                    if (PlayerGridMovement.gridPosition ==
                         GridMovement.DirectionToLocation(direction, i))
                     {
                         ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack, direction);
