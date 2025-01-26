@@ -1,4 +1,5 @@
 using Core;
+using Enemies;
 using UnityEngine;
 
 namespace BubbleGumGuy
@@ -9,10 +10,12 @@ namespace BubbleGumGuy
         private GameState.GameStage inputStage = GameState.GameStage.Input;
 
         private ActionDecider _actionDecider;
+        private CharacterState _characterState;
     
         void Awake()
         {
             _actionDecider = GetComponent<ActionDecider>();
+            _characterState = GetComponent<CharacterState>();
             GameState.RegisterPipelineItem(this, inputStage);
         }
 
@@ -62,6 +65,11 @@ namespace BubbleGumGuy
 
         public void Trigger()
         {
+        }
+
+        public bool IsAlive()
+        {
+            return _characterState.IsAlive;
         }
     }
 }

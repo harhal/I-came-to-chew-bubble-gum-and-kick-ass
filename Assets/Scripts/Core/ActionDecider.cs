@@ -1,4 +1,5 @@
 using BubbleGumGuy;
+using Enemies;
 using UnityEngine;
 
 namespace Core
@@ -23,6 +24,8 @@ namespace Core
         private KickProcessor _kickProcessor;
         private PopProcessor _popProcessor;
         private AttackProcessor _attackProcessor;
+        private CharacterState _characterState;
+
         
         void Awake()
         {
@@ -31,6 +34,7 @@ namespace Core
             _kickProcessor = GetComponent<KickProcessor>();
             _popProcessor = GetComponent<PopProcessor>();
             _attackProcessor = GetComponent<AttackProcessor>();
+            _characterState = GetComponent<CharacterState>();
         }
 
         public GridMovement GetGridMovement()
@@ -99,6 +103,11 @@ namespace Core
         public void ActionFinished()
         {
             GameState.PipelineItemProcessed();
+        }
+
+        public bool IsAlive()
+        {
+            return _characterState.IsAlive;
         }
     }
 }

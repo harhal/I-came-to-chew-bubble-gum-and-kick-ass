@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core
 {
@@ -7,6 +8,7 @@ namespace Core
         public enum GameStage
         {
             Start,
+            Decisionmaking,
             Input,
             PrePlayerActions,
             PlayerAction,
@@ -26,11 +28,12 @@ namespace Core
         private static readonly Dictionary<GameStage, GameStage> GameStageTransitions = 
             new Dictionary<GameStage, GameStage>
             {
-                { GameStage.Start, GameStage.Input },
+                { GameStage.Start, GameStage.Decisionmaking },
+                { GameStage.Decisionmaking, GameStage.Input },
                 { GameStage.Input, GameStage.PrePlayerActions },
                 { GameStage.PrePlayerActions, GameStage.PlayerAction },
                 { GameStage.PlayerAction, GameStage.PostPlayerActions },
-                { GameStage.PostPlayerActions, GameStage.Input }
+                { GameStage.PostPlayerActions, GameStage.Decisionmaking }
             };
 
         public static void Reset()
@@ -61,11 +64,7 @@ namespace Core
             
                 CurrentGameStage = transition;
                 
-                // ReSharper disable once CanSimplifyDictionaryLookupWithTryGetValue
-                if (_gameStagePipelines.ContainsKey(CurrentGameStage))
-                {
-                    _runningPipeline = new Queue<IGameStagePipelineItem>(_gameStagePipelines[CurrentGameStage]);
-                }
+                TransferStagePipelineToCurrent(CurrentGameStage);
 
                 loopBreaker++;
                 if (loopBreaker >= 10)
@@ -83,17 +82,25 @@ namespace Core
         public static void SetState(GameStage gameState)
         {
             CurrentGameStage = gameState;
-            
-            // ReSharper disable once CanSimplifyDictionaryLookupWithTryGetValue
-            if (_gameStagePipelines.ContainsKey(CurrentGameStage))
-            {
-                _runningPipeline = new Queue<IGameStagePipelineItem>(_gameStagePipelines[CurrentGameStage]);
-            }
+
+            TransferStagePipelineToCurrent(CurrentGameStage);
 
             if (_runningPipeline is { Count: > 0 })
             {
                 _runningPipeline.Dequeue().Trigger();
             }
+        }
+
+        private static void TransferStagePipelineToCurrent(GameStage stage)
+        {
+            // ReSharper disable once CanSimplifyDictionaryLookupWithTryGetValue
+            if (!_gameStagePipelines.ContainsKey(stage))
+            {
+                return;
+            }
+
+            _runningPipeline = new Queue<IGameStagePipelineItem>(_gameStagePipelines[stage].Where(
+                item => item != null && item.IsAlive()));
         }
     }
 }
