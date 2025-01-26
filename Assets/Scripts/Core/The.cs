@@ -25,9 +25,5 @@ namespace Core
                 Grid = gameObject;
             }
         }
-
-        void Update()
-        {
-        }
     }
 }

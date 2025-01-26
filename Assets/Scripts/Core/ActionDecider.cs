@@ -25,8 +25,9 @@ namespace Core
         private PopProcessor _popProcessor;
         private AttackProcessor _attackProcessor;
         private CharacterState _characterState;
+        private BubbleGumHitProcessor _bubbleGumHitProcessor;
 
-        
+
         void Awake()
         {
             GameState.RegisterPipelineItem(this, actionStage);        
@@ -35,6 +36,7 @@ namespace Core
             _popProcessor = GetComponent<PopProcessor>();
             _attackProcessor = GetComponent<AttackProcessor>();
             _characterState = GetComponent<CharacterState>();
+            _bubbleGumHitProcessor = GetComponent<BubbleGumHitProcessor>();
         }
 
         public GridMovement GetGridMovement()
@@ -45,6 +47,12 @@ namespace Core
         public void Trigger()
         {
             if (!_gridMovement)
+            {
+                GameState.PipelineItemProcessed();
+                return;
+            }
+
+            if (_bubbleGumHitProcessor && _bubbleGumHitProcessor.IsStuck())
             {
                 GameState.PipelineItemProcessed();
                 return;

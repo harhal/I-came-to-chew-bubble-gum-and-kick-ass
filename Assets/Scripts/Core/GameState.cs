@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 
 namespace Core
 {
@@ -17,6 +18,8 @@ namespace Core
             OutOfBubbleGum,
             CharacterDead
         }
+
+        public static Random StableRandomGenerator = new Random(26122025);
 
         public static GameStage CurrentGameStage { get; private set; } = GameStage.Start;
 
@@ -40,6 +43,7 @@ namespace Core
         {
             CurrentGameStage = GameStage.Start;
             _gameStagePipelines = new Dictionary<GameStage, Queue<IGameStagePipelineItem>>();
+            StableRandomGenerator = new Random(26122025);
         }
 
         public static void RegisterPipelineItem(IGameStagePipelineItem gameStagePipelineItem, GameStage stage)

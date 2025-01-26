@@ -2,14 +2,15 @@ using System;
 using BubbleGumGuy;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 namespace Core
 {
     public class GridMovement : MonoBehaviour
     {
-        private static readonly int Move = Animator.StringToHash("Move");
-        private static readonly int Direction = Animator.StringToHash("Direction");
+        private static readonly int MoveTrigger = Animator.StringToHash("Move");
+        private static readonly int DirectionParam = Animator.StringToHash("Direction");
 
         public enum GridDirection
         {
@@ -30,7 +31,9 @@ namespace Core
         [SerializeField]
         private Vector2 cellOffset;
 
-        private Vector2Int _gridPosition;
+        [SerializeField]
+        public Vector2Int GridPosition;
+        public GridDirection LookAtDirection { get; private set; }
 
         private void Awake()
         {
@@ -49,13 +52,13 @@ namespace Core
             switch (direction)
             {
                 case GridDirection.North: 
-                    return new Vector2Int(_gridPosition.x, _gridPosition.y + distance);
+                    return new Vector2Int(GridPosition.x, GridPosition.y + distance);
                 case GridDirection.South:
-                    return  new Vector2Int(_gridPosition.x, _gridPosition.y - distance);
+                    return  new Vector2Int(GridPosition.x, GridPosition.y - distance);
                 case GridDirection.East:
-                    return  new Vector2Int(_gridPosition.x + distance, _gridPosition.y);
+                    return  new Vector2Int(GridPosition.x + distance, GridPosition.y);
                 case GridDirection.West:
-                    return  new Vector2Int(_gridPosition.x - distance, _gridPosition.y);
+                    return  new Vector2Int(GridPosition.x - distance, GridPosition.y);
                 default:
                     return new Vector2Int();
             }
@@ -94,14 +97,14 @@ namespace Core
                                 new Vector3(cellOffset.x, cellOffset.y, 0);
             transform.position = worldLocation;
             
-            if (!GridOccupation.IsFree(_gridPosition))
+            if (!GridOccupation.IsFree(GridPosition))
             {
-                GridOccupation.Free(_gridPosition);
+                GridOccupation.Free(GridPosition);
             }
             
-            _gridPosition = position;
+            GridPosition = position;
             
-            GridOccupation.Occupy(_gridPosition, gameObject);
+            GridOccupation.Occupy(GridPosition, gameObject);
             
             return true;
         }
@@ -117,13 +120,24 @@ namespace Core
 
             _deferredDestination = destLocation;
             
+            OrientTo(direction);
+            
             if (_animator)
             {
-                _animator.SetInteger(Direction, (int)direction);
-                _animator.SetTrigger(Move);
+                _animator.SetTrigger(MoveTrigger);
             }
 
             return true;
+        }
+
+        public void OrientTo(GridDirection direction)
+        {
+            LookAtDirection = direction;
+            
+            if (_animator)
+            {
+                _animator.SetInteger(DirectionParam, (int)direction);
+            }
         }
 
         public void ReleasedDeferredMove()

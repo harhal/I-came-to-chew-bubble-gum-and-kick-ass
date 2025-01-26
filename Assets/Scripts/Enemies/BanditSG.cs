@@ -3,7 +3,7 @@ using UnityEngine.Serialization;
 
 namespace Enemies
 {
-    public class BanditSG : MonoBehaviour
+    public class BanditSg : MonoBehaviour
     {
         [SerializeField] 
         private bool bHasSg = false;
@@ -16,7 +16,7 @@ namespace Enemies
             
             if (animator)
             {
-                animator.SetTrigger(SgVarName);
+                animator.SetBool(SgVarName, bHasSg);
             }
         }
     }

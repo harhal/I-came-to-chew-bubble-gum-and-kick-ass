@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Legs_Kick_West
+  m_Name: Arms_Stuck_East
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,15 +21,15 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 1517142638, guid: d1ca67e6dd869d14a97eb071f831695e, type: 3}
+      value: {fileID: -3470249686268603144, guid: 071cc2efb127d8945bbd24b37c81287f, type: 3}
     - time: 0.16666667
-      value: {fileID: 514627150, guid: d1ca67e6dd869d14a97eb071f831695e, type: 3}
+      value: {fileID: -7661836105199614063, guid: 071cc2efb127d8945bbd24b37c81287f, type: 3}
     - time: 0.25
-      value: {fileID: -2112547534, guid: d1ca67e6dd869d14a97eb071f831695e, type: 3}
+      value: {fileID: 843651485, guid: 071cc2efb127d8945bbd24b37c81287f, type: 3}
     - time: 0.33333334
-      value: {fileID: -2112547534, guid: d1ca67e6dd869d14a97eb071f831695e, type: 3}
+      value: {fileID: 843651485, guid: 071cc2efb127d8945bbd24b37c81287f, type: 3}
     attribute: m_Sprite
-    path: Legs
+    path: Arms
     classID: 212
     script: {fileID: 0}
     flags: 2
@@ -41,7 +41,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 1563094196
+      path: 1288071446
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -50,10 +50,10 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 1517142638, guid: d1ca67e6dd869d14a97eb071f831695e, type: 3}
-    - {fileID: 514627150, guid: d1ca67e6dd869d14a97eb071f831695e, type: 3}
-    - {fileID: -2112547534, guid: d1ca67e6dd869d14a97eb071f831695e, type: 3}
-    - {fileID: -2112547534, guid: d1ca67e6dd869d14a97eb071f831695e, type: 3}
+    - {fileID: -3470249686268603144, guid: 071cc2efb127d8945bbd24b37c81287f, type: 3}
+    - {fileID: -7661836105199614063, guid: 071cc2efb127d8945bbd24b37c81287f, type: 3}
+    - {fileID: 843651485, guid: 071cc2efb127d8945bbd24b37c81287f, type: 3}
+    - {fileID: 843651485, guid: 071cc2efb127d8945bbd24b37c81287f, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -64,7 +64,7 @@ AnimationClip:
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 0
+    m_LoopTime: 1
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
@@ -80,14 +80,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.033333335
-    functionName: KickHit
+    functionName: AttackHit
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.33333334
-    functionName: OnAnimationFinished
+    functionName: ActionFinished
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

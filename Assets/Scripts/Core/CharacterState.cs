@@ -1,7 +1,6 @@
-using Core;
 using UnityEngine;
 
-namespace Enemies
+namespace Core
 {
     public class CharacterState : MonoBehaviour
     {
@@ -21,6 +20,12 @@ namespace Enemies
             if (animator)
             {
                 animator.SetTrigger(DeathTrigger);
+            }
+            
+            var gridMovement = GetComponent<GridMovement>();
+            if (gridMovement)
+            {
+                GridOccupation.Free(gridMovement.GridPosition);
             }
         }
 
