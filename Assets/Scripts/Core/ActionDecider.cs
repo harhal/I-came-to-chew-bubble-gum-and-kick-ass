@@ -141,6 +141,8 @@ namespace Core
                 onActionDecided.Invoke(_action, _actionDirection);
             }
             
+            _gridMovement.OrientTo(_actionDirection);
+            
             return true;
         }
 

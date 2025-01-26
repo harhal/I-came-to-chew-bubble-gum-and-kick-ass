@@ -79,6 +79,13 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
+  - time: 0
+    functionName: TriggerAudio
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: 6e752f85ce9b2c14b983598a1a650e2e, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.033333335
     functionName: AttackHit
     data: 
