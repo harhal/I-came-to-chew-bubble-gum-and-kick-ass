@@ -1,6 +1,5 @@
-using Enemies;
+using BubbleGumGuy;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Core
 {
@@ -9,6 +8,7 @@ namespace Core
         private static readonly int AttackTrigger = Animator.StringToHash("Attack");
         protected Animator Animator;
         protected GridMovement GridMovement;
+        private Inventory _inventory;
 
         public int range = 1;
 
@@ -16,6 +16,7 @@ namespace Core
         {
             Animator = GetComponent<Animator>();
             GridMovement = GetComponent<GridMovement>();
+            _inventory = GetComponent<Inventory>();
         }
 
         public virtual void Attack(GridMovement.GridDirection direction)
@@ -28,6 +29,11 @@ namespace Core
 
         public virtual void AttackHit()
         {
+            if (_inventory)
+            {
+                _inventory.SpendAmmo();
+            }
+            
             for (var distance = 1; distance <= range; distance++)
             {
                 var hitCell = GridMovement.DirectionToLocation(GridMovement.LookAtDirection, distance);

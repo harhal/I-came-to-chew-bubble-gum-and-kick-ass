@@ -28,7 +28,7 @@ namespace BubbleGumGuy
 
         public float GetBubbleGumPercentage()
         {
-            return bubbleGumMax / (float)bubbleGumCount;
+            return (float)bubbleGumCount / (float)bubbleGumMax;
         }
 
         public int GetAmmo()
@@ -80,7 +80,7 @@ namespace BubbleGumGuy
             }
         }
 
-        void SpendAmmo()
+        public void SpendAmmo()
         {
             shotgunAmmo--;
             if (shotgunAmmo == 0)
