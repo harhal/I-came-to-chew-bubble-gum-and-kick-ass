@@ -16,6 +16,9 @@ namespace BubbleGumGuy
         
         [SerializeField]
         private int shotgunAmmo = 0;
+        
+        [SerializeField]
+        private int shotgunAmmoMax = 3;
 
         private GridMovement _gridMovement;
 
@@ -41,12 +44,16 @@ namespace BubbleGumGuy
             switch (pickup.pickupType)
             {
                 case Pickup.Type.Bubblegum:
+                    bubbleGumCount = bubbleGumMax;
                     break;
                 case Pickup.Type.Shotgun:
+                    shotgunAmmo = shotgunAmmoMax;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            
+            Destroy(pickup.gameObject);
         }
     }
 }
