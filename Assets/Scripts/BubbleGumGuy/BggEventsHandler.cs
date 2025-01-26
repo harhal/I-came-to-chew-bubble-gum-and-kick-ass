@@ -7,7 +7,7 @@ namespace BubbleGumGuy
     {
         private void OnCharacterSpawned()
         {
-            GameState.SetState(GameState.GameStage.Input);
+            GameState.SetState(GameState.GameStage.Decisionmaking);
         }
     }
 }

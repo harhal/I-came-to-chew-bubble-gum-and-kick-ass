@@ -1,3 +1,4 @@
+using System;
 using BubbleGumGuy;
 using Enemies;
 using UnityEngine;
@@ -13,7 +14,10 @@ namespace Core
             Pop,
             Kick
         }
-        
+
+        private event Action<ActionType, GridMovement.GridDirection> onActionDecided;
+        private event Action onActionReleased;
+            
         private ActionType _action;
         private GridMovement.GridDirection _actionDirection;
         
@@ -39,6 +43,16 @@ namespace Core
             _bubbleGumHitProcessor = GetComponent<BubbleGumHitProcessor>();
         }
 
+        public void SubscribeOnDecision(Action<ActionType, GridMovement.GridDirection> onActionDecided)
+        {
+            this.onActionDecided += onActionDecided;
+        }
+
+        public void SubscribeOnRelease(Action onActionReleased)
+        {
+            this.onActionReleased += onActionReleased;
+        }
+        
         public GridMovement GetGridMovement()
         {
             return _gridMovement;
@@ -46,6 +60,11 @@ namespace Core
 
         public void Trigger()
         {
+            if (onActionReleased != null)
+            {
+                onActionReleased.Invoke();
+            }
+            
             if (!_gridMovement)
             {
                 GameState.PipelineItemProcessed();
@@ -86,7 +105,7 @@ namespace Core
                 case ActionType.Attack:
                     if (_attackProcessor)
                     {
-                        _attackProcessor.Attack();
+                        _attackProcessor.Attack(_actionDirection);
                     }
                     break;
                 case ActionType.Kick:
@@ -105,6 +124,12 @@ namespace Core
         {
             _action = action;
             _actionDirection = direction;
+            
+            if (onActionDecided != null)
+            {
+                onActionDecided.Invoke(_action, _actionDirection);
+            }
+            
             return true;
         }
 

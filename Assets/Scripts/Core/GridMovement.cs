@@ -64,7 +64,7 @@ namespace Core
             }
         }
 
-        bool CanMoveTo(Vector2Int position)
+        public bool CanMoveTo(Vector2Int position)
         {
             if (!GridOccupation.IsFree(position))
             {

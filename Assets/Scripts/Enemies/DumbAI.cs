@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Core;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -30,6 +31,29 @@ namespace Enemies
         public virtual void Trigger()
         {
             GameState.PipelineItemProcessed();
+        }
+
+        protected GridMovement.GridDirection FindMoveDirection()
+        {
+            List<GridMovement.GridDirection> sock = new List<GridMovement.GridDirection>
+            {
+                GridMovement.GridDirection.North,
+                GridMovement.GridDirection.South,
+                GridMovement.GridDirection.East,
+                GridMovement.GridDirection.West
+            };
+
+            do
+            {
+                var direction = sock[GameState.StableRandomGenerator.NextInt(sock.Count)];
+                Vector2Int nextLocation = GridMovement.DirectionToLocation(direction);
+                if (GridMovement.CanMoveTo(nextLocation))
+                {
+                    return direction;
+                }
+            } while (sock.Count > 1);
+
+            return sock[0];
         }
 
         public bool IsAlive()

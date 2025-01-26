@@ -7,30 +7,30 @@ namespace Core
     public class AttackProcessor : MonoBehaviour
     {
         private static readonly int AttackTrigger = Animator.StringToHash("Attack");
-        private Animator _animator;
-        private GridMovement _gridMovement;
+        protected Animator Animator;
+        protected GridMovement GridMovement;
 
         public int range = 1;
 
         void Awake()
         {
-            _animator = GetComponent<Animator>();
-            _gridMovement = GetComponent<GridMovement>();
+            Animator = GetComponent<Animator>();
+            GridMovement = GetComponent<GridMovement>();
         }
 
-        public void Attack()
+        public virtual void Attack(GridMovement.GridDirection direction)
         {
-            if (_animator)
+            if (Animator)
             {
-                _animator.SetTrigger(AttackTrigger);
+                Animator.SetTrigger(AttackTrigger);
             }
         }
 
         public virtual void AttackHit()
         {
-            for (int _range = 1; _range <= range; _range++)
+            for (var distance = 1; distance <= range; distance++)
             {
-                var hitCell = _gridMovement.DirectionToLocation(_gridMovement.LookAtDirection, _range);
+                var hitCell = GridMovement.DirectionToLocation(GridMovement.LookAtDirection, distance);
 
                 var victim = GridOccupation.GetOccupation(hitCell);
                 if (!victim)

@@ -20,14 +20,10 @@ namespace Enemies
         {
             if (PlayerGridMovement.GridPosition == GridMovement.DirectionToLocation(GridMovement.LookAtDirection))
             {
-                if (GameState.StableRandomGenerator.NextInt(100) < percentToShoot)
-                {
-                    ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack);
-                    base.Trigger();
-                    return;
-                }
+                ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack);
+                base.Trigger();
             }
-        
+
             if ((PlayerGridMovement.GridPosition - GridMovement.GridPosition).magnitude <= _attackProcessor.range)
             {
                 if (GameState.StableRandomGenerator.NextInt(100) < percentToShoot)
@@ -38,7 +34,7 @@ namespace Enemies
                 }
             }
 
-            GridMovement.GridDirection moveDirection = (GridMovement.GridDirection)GameState.StableRandomGenerator.NextInt(4);
+            GridMovement.GridDirection moveDirection = FindMoveDirection();
             ActionDecider.SetDesiredAction(ActionDecider.ActionType.Move, moveDirection);
             base.Trigger();
         }
