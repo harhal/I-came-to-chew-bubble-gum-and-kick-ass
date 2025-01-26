@@ -25,6 +25,7 @@ namespace BubbleGumGuy
         private GridMovement _gridMovement;
         private Animator _animator;
         private CharacterState _characterState;
+        private AttackProcessor _attackProcessor;
 
         public float GetBubbleGumPercentage()
         {
@@ -41,6 +42,7 @@ namespace BubbleGumGuy
             _gridMovement = GetComponent<GridMovement>();
             _animator = GetComponent<Animator>();
             _characterState = GetComponent<CharacterState>();
+            _attackProcessor = GetComponent<AttackProcessor>();
             ActionDecider actionDecider = GetComponent<ActionDecider>();
             actionDecider.SubscribeOnRelease(CheckPickup);
         }
@@ -63,6 +65,12 @@ namespace BubbleGumGuy
                     {
                         _animator.SetBool(HasSgFlag, true);
                     }
+
+                    if (_attackProcessor)
+                    {
+                        _attackProcessor.range = 3;
+                    }
+                    
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
