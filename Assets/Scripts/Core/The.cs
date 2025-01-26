@@ -8,10 +8,10 @@ namespace Core
         public static GameObject Grid;
         
         [SerializeField]
-        private bool theMe;
+        public bool theMe;
         
         [SerializeField]
-        private bool theGrid;
+        public bool theGrid;
         
         void Awake()
         {

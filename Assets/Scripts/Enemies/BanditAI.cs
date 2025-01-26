@@ -18,13 +18,13 @@ namespace Enemies
 
         public override void Trigger()
         {
-            if (PlayerGridMovement.GridPosition == GridMovement.DirectionToLocation(GridMovement.LookAtDirection))
+            if (PlayerGridMovement.gridPosition == GridMovement.DirectionToLocation(GridMovement.LookAtDirection))
             {
                 ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack);
                 base.Trigger();
             }
 
-            if ((PlayerGridMovement.GridPosition - GridMovement.GridPosition).magnitude <= _attackProcessor.range)
+            if ((PlayerGridMovement.gridPosition - GridMovement.gridPosition).magnitude <= _attackProcessor.range)
             {
                 if (GameState.StableRandomGenerator.NextInt(100) < percentToShoot)
                 {
