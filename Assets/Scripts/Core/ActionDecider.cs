@@ -131,7 +131,7 @@ namespace Core
             }
         }
 
-        public bool SetDesiredAction(ActionType action, GridMovement.GridDirection direction = GridMovement.GridDirection.East)
+        public bool SetDesiredAction(ActionType action, GridMovement.GridDirection direction)
         {
             _action = action;
             _actionDirection = direction;
@@ -141,9 +141,14 @@ namespace Core
                 onActionDecided.Invoke(_action, _actionDirection);
             }
             
-            //_gridMovement.OrientTo(_actionDirection);
+            _gridMovement.OrientTo(_actionDirection);
             
             return true;
+        }
+
+        public bool SetDesiredAction(ActionType action)
+        {
+            return SetDesiredAction(action, _gridMovement.LookAtDirection);
         }
 
         public void ActionFinished()
