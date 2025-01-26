@@ -13,7 +13,7 @@ namespace Pickups
             Bubblegum
         }
         
-        private static List<Pickup> _allPickups;
+        private static List<Pickup> _allPickups = new List<Pickup>();
 
         [SerializeField]
         public Type pickupType;
@@ -23,9 +23,15 @@ namespace Pickups
             _allPickups.Add(this);
         }
 
+        private void Start()
+        {
+            Grid theGrid = The.Grid.GetComponent<Grid>();
+            SetGridPosition(gridPosition, theGrid);
+        }
+
         public static Pickup GetPickupAtLocation(Vector2Int location)
         {
-            _allPickups.RemoveAll(pickup => pickup);
+            _allPickups.RemoveAll(pickup => !pickup);
             
             foreach (var pickup in _allPickups)
             {

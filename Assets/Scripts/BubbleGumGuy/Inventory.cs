@@ -27,6 +27,11 @@ namespace BubbleGumGuy
             return bubbleGumMax / (float)bubbleGumCount;
         }
 
+        public int GetAmmo()
+        {
+            return shotgunAmmo;
+        }
+
         private void Awake()
         {
             _gridMovement = GetComponent<GridMovement>();

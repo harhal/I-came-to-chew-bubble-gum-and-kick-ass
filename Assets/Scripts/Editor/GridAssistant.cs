@@ -36,8 +36,11 @@ namespace Editor
             foreach (var occupier in occupiers)
             {
                 Vector3Int gridPositionV3 = new Vector3Int(occupier.gridPosition.x, occupier.gridPosition.y, 0);
-                occupier.transform.position = theGrid.GetCellCenterWorld(gridPositionV3) +
-                                              new Vector3(occupier.cellOffset.x, occupier.cellOffset.y, 0);
+                occupier.SetGridPosition(occupier.gridPosition, theGrid);
+                
+#if UNITY_EDITOR
+                EditorUtility.SetDirty(occupier);
+#endif
             }
         }
 
@@ -51,11 +54,14 @@ namespace Editor
                 return;
             }
 
-            var occupiers = FindObjectsByType<GridMovement>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            var occupiers = FindObjectsByType<BaseGridPlacable>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 
             foreach (var occupier in occupiers)
             {
                 occupier.gridPosition = (Vector2Int)theGrid.WorldToCell(occupier.transform.position);
+#if UNITY_EDITOR
+                EditorUtility.SetDirty(occupier);
+#endif
             }
         }
     }
