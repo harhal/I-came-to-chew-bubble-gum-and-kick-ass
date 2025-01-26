@@ -60,19 +60,22 @@ namespace Core
 
         public void Trigger()
         {
-            if (onActionReleased != null)
-            {
-                onActionReleased.Invoke();
-            }
-            
             if (!_gridMovement)
             {
+                if (onActionReleased != null)
+                {
+                    onActionReleased.Invoke();
+                }
                 GameState.PipelineItemProcessed();
                 return;
             }
 
             if (_bubbleGumHitProcessor && _bubbleGumHitProcessor.IsStuck())
             {
+                if (onActionReleased != null)
+                {
+                    onActionReleased.Invoke();
+                }
                 GameState.PipelineItemProcessed();
                 return;
             }
@@ -92,6 +95,10 @@ namespace Core
                 {
                     if (!_gridMovement.DeferredGo(_actionDirection))
                     {
+                        if (onActionReleased != null)
+                        {
+                            onActionReleased.Invoke();
+                        }
                         GameState.PipelineItemProcessed();
                     }
                 }
@@ -115,6 +122,10 @@ namespace Core
                     }
                     break;
                 default:
+                    if (onActionReleased != null)
+                    {
+                        onActionReleased.Invoke();
+                    }
                     GameState.PipelineItemProcessed();
                     break;
             }
@@ -135,6 +146,10 @@ namespace Core
 
         public void ActionFinished()
         {
+            if (onActionReleased != null)
+            {
+                onActionReleased.Invoke();
+            }
             GameState.PipelineItemProcessed();
         }
 

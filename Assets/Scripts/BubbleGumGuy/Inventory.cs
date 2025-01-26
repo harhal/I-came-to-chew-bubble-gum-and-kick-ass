@@ -8,6 +8,8 @@ namespace BubbleGumGuy
 {
     public class Inventory : MonoBehaviour
     {
+        private static readonly int HasSgFlag = Animator.StringToHash("HasSG");
+
         [SerializeField]
         private int bubbleGumCount = 20;
         
@@ -21,6 +23,8 @@ namespace BubbleGumGuy
         private int shotgunAmmoMax = 3;
 
         private GridMovement _gridMovement;
+        private Animator _animator;
+        private CharacterState _characterState;
 
         public float GetBubbleGumPercentage()
         {
@@ -35,6 +39,8 @@ namespace BubbleGumGuy
         private void Awake()
         {
             _gridMovement = GetComponent<GridMovement>();
+            _animator = GetComponent<Animator>();
+            _characterState = GetComponent<CharacterState>();
             ActionDecider actionDecider = GetComponent<ActionDecider>();
             actionDecider.SubscribeOnRelease(CheckPickup);
         }
@@ -53,12 +59,34 @@ namespace BubbleGumGuy
                     break;
                 case Pickup.Type.Shotgun:
                     shotgunAmmo = shotgunAmmoMax;
+                    if (_animator)
+                    {
+                        _animator.SetBool(HasSgFlag, true);
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
             
             Destroy(pickup.gameObject);
+        }
+
+        void SpendBubbleGum()
+        {
+            bubbleGumCount--;
+            if (bubbleGumCount == 0)
+            {
+                _characterState.StartDie();
+            }
+        }
+
+        void SpendAmmo()
+        {
+            shotgunAmmo--;
+            if (shotgunAmmo == 0)
+            {
+                _animator.SetBool(HasSgFlag, false);
+            }
         }
     }
 }
