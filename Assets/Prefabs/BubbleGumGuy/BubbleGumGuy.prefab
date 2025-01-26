@@ -545,6 +545,7 @@ GameObject:
   - component: {fileID: 6031904964857782033}
   - component: {fileID: 8528235963973721250}
   - component: {fileID: 5123560818584514382}
+  - component: {fileID: 3028825017931207188}
   m_Layer: 0
   m_Name: BubbleGumGuy
   m_TagString: Untagged
@@ -897,5 +898,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f95fd0534893c24aa22faacb01c4345, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3028825017931207188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7581326833646107327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20683454404e2394aa7b824842583918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
