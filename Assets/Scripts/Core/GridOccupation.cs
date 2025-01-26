@@ -36,7 +36,7 @@ namespace Core
 
         public static void Occupy(Vector2Int location, GameObject occupation)
         {
-            if (IsValidLocation(location))
+            if (!IsValidLocation(location))
             {
                 return;
             }

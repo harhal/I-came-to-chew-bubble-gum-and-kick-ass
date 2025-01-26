@@ -1,4 +1,6 @@
+using System;
 using BubbleGumGuy;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -6,16 +8,21 @@ namespace Core
 {
     public class GridMovement : MonoBehaviour
     {
+        private static readonly int Move = Animator.StringToHash("Move");
+        private static readonly int Direction = Animator.StringToHash("Direction");
+
         public enum GridDirection
         {
-            Up,
-            Down,
-            Right,
-            Left
+            East,
+            South,
+            North,
+            West
         }
         
         private Grid _theGrid;
         private Tilemap _tilemap;
+        private Animator _animator;
+        private Vector2Int _deferredDestination;
         
         [SerializeField]
         private Vector2Int startGridPosition;
@@ -23,16 +30,38 @@ namespace Core
         [SerializeField]
         private Vector2 cellOffset;
 
+        private Vector2Int _gridPosition;
+
+        private void Awake()
+        {
+            _animator = GetComponent<Animator>();
+        }
+
         private void Start()
         {
             _theGrid = The.Grid.GetComponent<Grid>();
             _tilemap = The.Grid.GetComponentInChildren<Tilemap>();
             MoveTo(startGridPosition);
         }
+        
+        public Vector2Int DirectionToLocation(GridDirection direction, int distance = 1)
+        {
+            switch (direction)
+            {
+                case GridDirection.North: 
+                    return new Vector2Int(_gridPosition.x, _gridPosition.y + distance);
+                case GridDirection.South:
+                    return  new Vector2Int(_gridPosition.x, _gridPosition.y - distance);
+                case GridDirection.East:
+                    return  new Vector2Int(_gridPosition.x + distance, _gridPosition.y);
+                case GridDirection.West:
+                    return  new Vector2Int(_gridPosition.x - distance, _gridPosition.y);
+                default:
+                    return new Vector2Int();
+            }
+        }
 
-        private Vector2Int _gridPosition;
-
-        public bool MoveTo(Vector2Int position)
+        bool CanMoveTo(Vector2Int position)
         {
             if (!GridOccupation.IsFree(position))
             {
@@ -49,44 +78,57 @@ namespace Core
                 return false;
             }
             
+            return true;
+        }
+
+        public bool MoveTo(Vector2Int position)
+        {
+            if (!CanMoveTo(position))
+            {
+                return false;
+            }
+            
+            var gridPositionV3 = new Vector3Int(position.x, position.y, 0);
+            
+            var worldLocation = _theGrid.GetCellCenterWorld(gridPositionV3) + 
+                                new Vector3(cellOffset.x, cellOffset.y, 0);
+            transform.position = worldLocation;
+            
             if (!GridOccupation.IsFree(_gridPosition))
             {
                 GridOccupation.Free(_gridPosition);
             }
             
-            var worldLocation = _theGrid.GetCellCenterWorld(gridPositionV3) + 
-                                new Vector3(cellOffset.x, cellOffset.y, 0);
-            transform.position = worldLocation;
             _gridPosition = position;
+            
             GridOccupation.Occupy(_gridPosition, gameObject);
             
             return true;
         }
 
-        public void Go(GridDirection direction, int distance = 1)
+        public bool DeferredGo(GridDirection direction, int distance = 1)
         {
-            Vector2Int destLocation;
+            var destLocation = DirectionToLocation(direction, distance);
             
-            switch (direction)
+            if (!CanMoveTo(destLocation))
             {
-                case GridDirection.Up: 
-                    destLocation = new Vector2Int(_gridPosition.x, _gridPosition.y + distance);
-                    break;
-                case GridDirection.Down:
-                    destLocation = new Vector2Int(_gridPosition.x, _gridPosition.y - distance);
-                    break;
-                case GridDirection.Right:
-                    destLocation = new Vector2Int(_gridPosition.x + distance, _gridPosition.y);
-                    break;
-                case GridDirection.Left:
-                    destLocation = new Vector2Int(_gridPosition.x - distance, _gridPosition.y);
-                    break;
-                default:
-                    //Debug.LogError("Invalid direction");
-                    return;
+                return false;
             }
+
+            _deferredDestination = destLocation;
             
-            MoveTo(destLocation);
+            if (_animator)
+            {
+                _animator.SetInteger(Direction, (int)direction);
+                _animator.SetTrigger(Move);
+            }
+
+            return true;
+        }
+
+        public void ReleasedDeferredMove()
+        {
+            MoveTo(_deferredDestination);
         }
     }
 }

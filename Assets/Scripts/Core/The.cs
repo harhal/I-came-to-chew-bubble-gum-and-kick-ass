@@ -13,7 +13,7 @@ namespace Core
         [SerializeField]
         private bool theGrid;
         
-        void Start()
+        void Awake()
         {
             if (theMe)
             {
@@ -24,6 +24,10 @@ namespace Core
             {
                 Grid = gameObject;
             }
+        }
+
+        void Update()
+        {
         }
     }
 }
