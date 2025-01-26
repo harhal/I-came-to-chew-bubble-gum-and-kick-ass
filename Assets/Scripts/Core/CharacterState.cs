@@ -35,6 +35,10 @@ namespace Core
             {
                 Destroy(gameObject);
             }
+            else
+            {
+                GameState.SetState(GameState.GameStage.CharacterDead);
+            }
         }
     }
 }

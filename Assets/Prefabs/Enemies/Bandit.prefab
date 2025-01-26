@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 4943263394508597957}
   - component: {fileID: 8605182885376419111}
   - component: {fileID: 5813809571018429760}
+  - component: {fileID: 539501997365198554}
   m_Layer: 0
   m_Name: Bandit
   m_TagString: Untagged
@@ -157,9 +158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3f098b6aa28f634c90111eeee781039, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startGridPosition: {x: 6, y: 0}
   cellOffset: {x: 0, y: 0.05}
-  GridPosition: {x: 0, y: 0}
+  gridPosition: {x: 0, y: 0}
 --- !u!114 &6534920439078202178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffbef952b2b0cad4aa8428000ed9980c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fullHitDuration: 3
 --- !u!82 &8605182885376419111
 AudioSource:
   m_ObjectHideFlags: 0
@@ -404,6 +405,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f95fd0534893c24aa22faacb01c4345, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &539501997365198554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3984849359496294711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbfcefa47a288bd4c9783395c725d8a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5098420712455482909
