@@ -1,16 +1,21 @@
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+namespace BubbleGumGuy
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class Inventory : MonoBehaviour
     {
+        [SerializeField]
+        private int BubbleGumCount = 20;
         
-    }
+        [SerializeField]
+        private int BubbleGumMax = 20;
+        
+        [SerializeField]
+        private int shotgunAmmo = 0;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public float GetBubbleGumPercentage()
+        {
+            return BubbleGumMax / (float)BubbleGumCount;
+        }
     }
 }
