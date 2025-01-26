@@ -27,6 +27,13 @@ namespace Core
             {
                 GridOccupation.Free(gridMovement.gridPosition);
             }
+
+            var deathProc = GetComponent<DeathProcessor>();
+
+            if (deathProc)
+            {
+                deathProc.OnDeath();
+            }
         }
 
         public void Decay()
