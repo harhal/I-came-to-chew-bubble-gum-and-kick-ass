@@ -42,7 +42,7 @@ namespace Core
                 if (!victim)
                 {
                     //TODO: PlayHitSound
-                    return;
+                    continue;
                 }
 
                 var victimCharacterState = victim.GetComponent<CharacterState>();

@@ -10,7 +10,10 @@ namespace Enemies
 
         private static readonly int StuckParam = Animator.StringToHash("Stuck");
 
-        private bool _isStuck;
+        private int _LeftHitDuration = 0;
+
+        [SerializeField]
+        private int fullHitDuration = 3;
 
         private void Awake()
         {
@@ -21,36 +24,42 @@ namespace Enemies
 
         public bool IsStuck()
         {
-            return _isStuck;
+            return _LeftHitDuration > 0;
         }
 
         public void ReceiveHit()
         {
-            _isStuck = true;
+            _LeftHitDuration = fullHitDuration;
             if (!_animator)
             {
                 return;
             }
         
-            _animator.SetBool(StuckParam, _isStuck);
+            _animator.SetBool(StuckParam, true);
         }
 
         public void Trigger()
         {
-            if (!_isStuck)
+            if (_LeftHitDuration == 0)
             {
                 GameState.PipelineItemProcessed();
                 return;
             }
             
-            _isStuck = false;
+            _LeftHitDuration--;
+            if (_LeftHitDuration > 0)
+            {
+                GameState.PipelineItemProcessed();
+                return;
+            }
+            
             if (!_animator)
             {
                 GameState.PipelineItemProcessed();
                 return;
             }
 
-            _animator.SetBool(StuckParam, _isStuck);
+            _animator.SetBool(StuckParam, false);
             GameState.PipelineItemProcessed();
         }
 
