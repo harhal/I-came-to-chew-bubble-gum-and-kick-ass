@@ -95,6 +95,15 @@ namespace Core
                 {
                     if (!_gridMovement.DeferredGo(_actionDirection))
                     {
+                        if (GridOccupation.GetOccupation(_gridMovement.DirectionToLocation(_actionDirection)) == The.Me)
+                        {
+                            if (_attackProcessor)
+                            {
+                                _attackProcessor.Attack(_actionDirection);
+                                break;
+                            }
+                        }
+                        
                         if (onActionReleased != null)
                         {
                             onActionReleased.Invoke();

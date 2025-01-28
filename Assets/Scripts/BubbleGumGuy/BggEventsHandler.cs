@@ -37,7 +37,7 @@ namespace BubbleGumGuy
         {
             yield return new WaitForSeconds(2f);
             
-            SceneManager.LoadScene(nextScene);
+            SceneManager.LoadScene(sceneName);
         }
     }
 }
