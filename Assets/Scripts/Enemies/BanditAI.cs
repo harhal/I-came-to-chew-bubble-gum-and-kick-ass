@@ -21,6 +21,7 @@ namespace Enemies
             {
                 ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack);
                 base.Trigger();
+                return;
             }
 
             if ((PlayerGridMovement.gridPosition - GridMovement.gridPosition).magnitude <= _attackProcessor.range)

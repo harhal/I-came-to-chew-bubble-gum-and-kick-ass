@@ -19,7 +19,7 @@ namespace Enemies
         {
             _animator = GetComponent<Animator>();
             _characterState = GetComponent<CharacterState>();
-            GameState.RegisterPipelineItem(this, GameState.GameStage.PrePlayerActions);
+            GameState.RegisterPipelineItem(this, GameState.GameStage.HitProcessing);
         }
 
         public bool IsStuck()

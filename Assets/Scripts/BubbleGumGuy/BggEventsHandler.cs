@@ -1,3 +1,4 @@
+using System.Collections;
 using Core;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,14 +23,21 @@ namespace BubbleGumGuy
             {
                 GameState.Reset();
                 Scene currentScene = SceneManager.GetActiveScene();
-                SceneManager.LoadScene(currentScene.name);
+                StartCoroutine(LoadNextScene(currentScene.name));
                 return;
             }
             if (GameState.CurrentGameStage == GameState.GameStage.AreaCleared)
             {
                 GameState.Reset();
-                SceneManager.LoadScene(nextScene);
+                StartCoroutine(LoadNextScene(nextScene));
             }
+        }
+
+        IEnumerator LoadNextScene(string sceneName)
+        {
+            yield return new WaitForSeconds(2f);
+            
+            SceneManager.LoadScene(nextScene);
         }
     }
 }

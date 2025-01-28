@@ -16,7 +16,8 @@ namespace Core
             PostPlayerActions,
             AreaCleared,
             OutOfBubbleGum,
-            CharacterDead
+            CharacterDead,
+            HitProcessing
         }
 
         public static Random StableRandomGenerator = new Random(26122025);
@@ -36,7 +37,8 @@ namespace Core
                 { GameStage.Input, GameStage.PrePlayerActions },
                 { GameStage.PrePlayerActions, GameStage.PlayerAction },
                 { GameStage.PlayerAction, GameStage.PostPlayerActions },
-                { GameStage.PostPlayerActions, GameStage.Decisionmaking }
+                { GameStage.PostPlayerActions, GameStage.HitProcessing },
+                { GameStage.HitProcessing, GameStage.Decisionmaking }
             };
 
         public static void Reset()
