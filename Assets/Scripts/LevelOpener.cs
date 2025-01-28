@@ -9,7 +9,6 @@ public class LevelOpener : MonoBehaviour
         
     }
     
-    private bool keyPressed = false;
     void Update()
     {
         if (Input.anyKey)
@@ -19,7 +18,6 @@ public class LevelOpener : MonoBehaviour
         }
         else
         {
-            // put your camera move code here 
         }
     }
 }

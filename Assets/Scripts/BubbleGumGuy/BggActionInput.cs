@@ -1,6 +1,7 @@
+using System;
 using Core;
-using Enemies;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace BubbleGumGuy
 {
@@ -11,7 +12,9 @@ namespace BubbleGumGuy
 
         private ActionDecider _actionDecider;
         private CharacterState _characterState;
-    
+
+        public event Action OnInputStageEntered;
+
         void Awake()
         {
             _actionDecider = GetComponent<ActionDecider>();
@@ -19,52 +22,87 @@ namespace BubbleGumGuy
             GameState.RegisterPipelineItem(this, inputStage);
         }
 
-        void Update()
+        public void OnMove(InputAction.CallbackContext context)
+        {
+            Vector2 inputDirection = context.ReadValue<Vector2>();
+            if (inputDirection.magnitude < 0.1f)
+            {
+                return;
+            }
+            
+            OnMove(inputDirection);
+        }
+
+        public void OnMove(Vector2 inputDirection)
+        {
+            if (GameState.CurrentGameStage != inputStage)
+            {
+                return;
+            }
+
+            if (Math.Abs(inputDirection.x) > Math.Abs(inputDirection.y))
+            {
+                if (inputDirection.x > 0)
+                {
+                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.East);
+                    GameState.PipelineItemProcessed();
+                }
+                else
+                {
+                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.West);
+                    GameState.PipelineItemProcessed();
+                }
+            }
+            else
+            {
+                if (inputDirection.y > 0)
+                {
+                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.North);
+                    GameState.PipelineItemProcessed();
+                }
+                else
+                {
+                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.South);
+                    GameState.PipelineItemProcessed();
+                }
+            }
+        }
+
+        public void OnAttack(InputAction.CallbackContext context)
+        {
+            OnAttack();
+        }
+
+        public void OnAttack()
         {
             if (GameState.CurrentGameStage != inputStage)
             {
                 return;
             }
             
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.North);
-                GameState.PipelineItemProcessed();
-            }
-            
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.South);
-                GameState.PipelineItemProcessed();
-            }
-            
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.East);
-                GameState.PipelineItemProcessed();
-            }
-            
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.West);
-                GameState.PipelineItemProcessed();
-            }
+            _actionDecider.SetDesiredAction(ActionDecider.ActionType.Attack);
+            GameState.PipelineItemProcessed();
+        }
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                _actionDecider.SetDesiredAction(ActionDecider.ActionType.Attack);
-                GameState.PipelineItemProcessed();
-            }
+        public void OnPop(InputAction.CallbackContext context)
+        {
+            OnPop();
+        }
 
-            if (Input.GetKeyDown(KeyCode.LeftControl))
+        public void OnPop()
+        {
+            if (GameState.CurrentGameStage != inputStage)
             {
-                _actionDecider.SetDesiredAction(ActionDecider.ActionType.Pop);
-                GameState.PipelineItemProcessed();
+                return;
             }
+            
+            _actionDecider.SetDesiredAction(ActionDecider.ActionType.Pop);
+            GameState.PipelineItemProcessed();
         }
 
         public void Trigger()
         {
+            OnInputStageEntered?.Invoke();
         }
 
         public bool IsAlive()
