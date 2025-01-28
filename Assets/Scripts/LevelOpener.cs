@@ -14,7 +14,6 @@ public class LevelOpener : MonoBehaviour
         if (Input.anyKey)
         {
             SceneManager.LoadScene("Lvl1");
-            //keyPressed = true; 
         }
         else
         {
