@@ -40,9 +40,7 @@ namespace Enemies
 
             var moveDirection = bPlayDumb
                 ? FindRandValidDirection()
-                :
-                //GridHelper.GetDirectionFromTo(GridMovement.gridPosition, PlayerGridMovement.gridPosition);
-                GridPathBuilder.FindPath(GridMovement.GetNavigation(), GridMovement.gridPosition,
+                : GridPathBuilder.FindPath(GridMovement.GetNavigation(), GridMovement.gridPosition,
                     PlayerGridMovement.gridPosition, true).GetFirstDirection();
 
             ActionDecider.SetDesiredAction(ActionDecider.ActionType.Move, moveDirection);

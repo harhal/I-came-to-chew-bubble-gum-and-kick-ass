@@ -1,28 +1,45 @@
 using Core;
+using UnityEngine;
 
 namespace Enemies
 {
     public class NinjaAI : DumbAI
     {
+        [SerializeField] 
+        private int percentToPlayDumb = 20;
+        
+        // ReSharper disable Unity.PerformanceAnalysis
         public override void Trigger()
         {
-            for (int d = 0; d < 4; d++)
+            var bPlayDumb = GameState.StableRandomGenerator.NextInt(100) < percentToPlayDumb;
+            
+            if (bPlayDumb)
             {
-                for (int i = 1; i < 4; i++)
-                {
-                    GridHelper.GridDirection direction = (GridHelper.GridDirection)d;
-                    if (PlayerGridMovement.gridPosition ==
-                        GridHelper.DirectionToLocation(GridMovement.gridPosition, direction, i))
-                    {
-                        ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack, direction);
-                        base.Trigger();
-                        return;
-                    }
-                }
+                var chargeDirection = FindRandValidDirection();
+                GetComponent<NinjaAttackProcessor>().leftCharge = 3;
+                ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack, chargeDirection);
             }
+            else
+            {
+                var path = GridPathBuilder.FindPath(GridMovement.GetNavigation(), GridMovement.gridPosition,
+                    PlayerGridMovement.gridPosition, true);
+                
+                var chargeDirection = path.GetFirstDirection();
+                
+                int chargeLength = 0;
+                foreach (var direction in path.GetDirections())
+                {
+                    if (direction != chargeDirection)
+                    {
+                        break;
+                    }
+                    
+                    chargeLength++;
+                }
 
-            GridHelper.GridDirection chargeDirection = FindRandValidDirection();
-            ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack, chargeDirection);
+                GetComponent<NinjaAttackProcessor>().leftCharge = chargeLength;
+                ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack, chargeDirection);
+            }
             base.Trigger();
         }
     }

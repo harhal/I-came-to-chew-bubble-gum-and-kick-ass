@@ -1,9 +1,12 @@
 using Core;
+using UnityEngine.Serialization;
 
 namespace Enemies
 {
     public class NinjaAttackProcessor : AttackProcessor
     {
+        public int leftCharge = 3;
+        
         public override void Attack(GridHelper.GridDirection direction)
         {
             GridMovement.OrientTo(direction);
@@ -12,6 +15,13 @@ namespace Enemies
 
         public override void AttackHit()
         {
+            if (leftCharge == 0)
+            {
+                return;
+            }
+
+            leftCharge--;
+            
             var hitCell = GridHelper.DirectionToLocation(GridMovement.gridPosition, GridMovement.LookAtDirection);
 
             var victim = GridMovement.GetNavigation().GetOccupation(hitCell);
