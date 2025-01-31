@@ -25,7 +25,7 @@ namespace Core
             var gridMovement = GetComponent<GridMovement>();
             if (gridMovement)
             {
-                GridOccupation.Free(gridMovement.gridPosition);
+                gridMovement.GetNavigation().Free(gridMovement.gridPosition);
             }
 
             var deathProc = GetComponent<DeathProcessor>();

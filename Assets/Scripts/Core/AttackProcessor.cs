@@ -19,7 +19,7 @@ namespace Core
             _inventory = GetComponent<Inventory>();
         }
 
-        public virtual void Attack(GridMovement.GridDirection direction)
+        public virtual void Attack(GridHelper.GridDirection direction)
         {
             if (Animator)
             {
@@ -36,9 +36,9 @@ namespace Core
             
             for (var distance = 1; distance <= range; distance++)
             {
-                var hitCell = GridMovement.DirectionToLocation(GridMovement.LookAtDirection, distance);
+                var hitCell = GridHelper.DirectionToLocation(GridMovement.gridPosition, GridMovement.LookAtDirection, distance);
 
-                var victim = GridOccupation.GetOccupation(hitCell);
+                var victim = GridMovement.GetNavigation().GetOccupation(hitCell);
                 if (!victim)
                 {
                     //TODO: PlayHitSound

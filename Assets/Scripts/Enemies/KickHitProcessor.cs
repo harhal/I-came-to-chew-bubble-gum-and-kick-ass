@@ -6,14 +6,13 @@ namespace Enemies
 {
     public class KickHitProcessor : MonoBehaviour
     {
-        private GridMovement.GridDirection _actionDirection;
+        private GridHelper.GridDirection _actionDirection;
         private Animator _animator;
         private GridMovement _gridMovement;
         private CharacterState _characterState;
         private Action _onKickFinished;
 
         private static readonly int KickedTrigger = Animator.StringToHash("Kicked");
-        private static readonly int DirectionParam = Animator.StringToHash("Direction");
 
         private void Awake()
         {
@@ -22,7 +21,7 @@ namespace Enemies
             _characterState = GetComponent<CharacterState>();
         }
 
-        public void ReceiveHit(GridMovement.GridDirection actionDirection, Action onKickFinished)
+        public void ReceiveHit(GridHelper.GridDirection actionDirection, Action onKickFinished)
         {
             if (!_animator || !_gridMovement || !_characterState)
             {
@@ -38,7 +37,7 @@ namespace Enemies
 
         public void MoveKickedMe()
         {
-            var nextCell = _gridMovement.DirectionToLocation(_actionDirection);
+            var nextCell = GridHelper.DirectionToLocation(_gridMovement.gridPosition, _actionDirection);
             if (_gridMovement.MoveTo(nextCell))
             {
                 return;
@@ -46,7 +45,7 @@ namespace Enemies
             
             _characterState.StartDie();
 
-            var collidedWith = GridOccupation.GetOccupation(nextCell);
+            var collidedWith = _gridMovement.GetNavigation().GetOccupation(nextCell);
             if (collidedWith)
             {
                 var otherVictimState = collidedWith.GetComponent<CharacterState>();

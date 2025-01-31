@@ -26,9 +26,9 @@ namespace BubbleGumGuy
 
         public void PopHit()
         {
-            var hitCell = _gridMovement.DirectionToLocation(_gridMovement.LookAtDirection);
+            var hitCell = GridHelper.DirectionToLocation(_gridMovement.gridPosition, _gridMovement.LookAtDirection);
 
-            var victim = GridOccupation.GetOccupation(hitCell);
+            var victim = _gridMovement.GetNavigation().GetOccupation(hitCell);
             if (!victim)
             {
                 //TODO: PlayHitSound

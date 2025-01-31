@@ -10,9 +10,9 @@ namespace Enemies
             {
                 for (int i = 1; i < 4; i++)
                 {
-                    GridMovement.GridDirection direction = (GridMovement.GridDirection)d;
+                    GridHelper.GridDirection direction = (GridHelper.GridDirection)d;
                     if (PlayerGridMovement.gridPosition ==
-                        GridMovement.DirectionToLocation(direction, i))
+                        GridHelper.DirectionToLocation(GridMovement.gridPosition, direction, i))
                     {
                         ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack, direction);
                         base.Trigger();
@@ -21,7 +21,7 @@ namespace Enemies
                 }
             }
 
-            GridMovement.GridDirection chargeDirection = FindMoveDirection();
+            GridHelper.GridDirection chargeDirection = FindRandValidDirection();
             ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack, chargeDirection);
             base.Trigger();
         }

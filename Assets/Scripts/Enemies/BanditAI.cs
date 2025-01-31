@@ -9,6 +9,8 @@ namespace Enemies
 
         [SerializeField] private int percentToShoot = 60;
 
+        [SerializeField] private int percentToPlayDumb = 20;
+
         public override void Awake()
         {
             base.Awake();
@@ -17,7 +19,7 @@ namespace Enemies
 
         public override void Trigger()
         {
-            if (PlayerGridMovement.gridPosition == GridMovement.DirectionToLocation(GridMovement.LookAtDirection))
+            if (PlayerGridMovement.gridPosition == GridHelper.DirectionToLocation(GridMovement.gridPosition, GridMovement.LookAtDirection))
             {
                 ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack);
                 base.Trigger();
@@ -33,25 +35,15 @@ namespace Enemies
                     return;
                 }
             }
+            
+            var bPlayDumb = GameState.StableRandomGenerator.NextInt(100) < percentToPlayDumb;
 
-            GridMovement.GridDirection moveDirection = FindMoveDirection();
-
-            if (GameState.StableRandomGenerator.NextInt(100) < 80)
-            {
-                Vector2Int delta = PlayerGridMovement.gridPosition - GridMovement.gridPosition;
-
-                int absX = Mathf.Abs(delta.x);
-                int absY = Mathf.Abs(delta.y);
-
-                if (absY > absX)
-                {
-                    moveDirection = delta.y > 0 ? GridMovement.GridDirection.North : GridMovement.GridDirection.South;
-                }
-                else
-                {
-                    moveDirection = delta.x > 0 ? GridMovement.GridDirection.East : GridMovement.GridDirection.West;
-                }
-            }
+            var moveDirection = bPlayDumb
+                ? FindRandValidDirection()
+                :
+                //GridHelper.GetDirectionFromTo(GridMovement.gridPosition, PlayerGridMovement.gridPosition);
+                GridPathBuilder.FindPath(GridMovement.GetNavigation(), GridMovement.gridPosition,
+                    PlayerGridMovement.gridPosition, true).GetFirstDirection();
 
             ActionDecider.SetDesiredAction(ActionDecider.ActionType.Move, moveDirection);
             base.Trigger();

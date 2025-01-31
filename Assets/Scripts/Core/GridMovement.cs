@@ -1,9 +1,4 @@
-using System;
-using BubbleGumGuy;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.Tilemaps;
 
 namespace Core
 {
@@ -12,20 +7,12 @@ namespace Core
         private static readonly int MoveTrigger = Animator.StringToHash("Move");
         private static readonly int DirectionParam = Animator.StringToHash("Direction");
 
-        public enum GridDirection
-        {
-            East,
-            South,
-            North,
-            West
-        }
-        
         private Grid _theGrid;
-        private Tilemap _tilemap;
+        private GridNavigation _gridNavigation;
         private Animator _animator;
         private Vector2Int _deferredDestination;
         
-        public GridDirection LookAtDirection { get; private set; }
+        public GridHelper.GridDirection LookAtDirection { get; private set; }
 
         private void Awake()
         {
@@ -35,51 +22,18 @@ namespace Core
         private void Start()
         {
             _theGrid = The.Grid.GetComponent<Grid>();
-            _tilemap = The.Grid.GetComponentInChildren<Tilemap>();
+            _gridNavigation = The.Grid.GetComponent<GridNavigation>();
             MoveTo(gridPosition);
         }
-        
-        public Vector2Int DirectionToLocation(GridDirection direction, int distance = 1)
-        {
-            switch (direction)
-            {
-                case GridDirection.North: 
-                    return new Vector2Int(gridPosition.x, gridPosition.y + distance);
-                case GridDirection.South:
-                    return  new Vector2Int(gridPosition.x, gridPosition.y - distance);
-                case GridDirection.East:
-                    return  new Vector2Int(gridPosition.x + distance, gridPosition.y);
-                case GridDirection.West:
-                    return  new Vector2Int(gridPosition.x - distance, gridPosition.y);
-                default:
-                    return new Vector2Int();
-            }
-        }
 
-        public bool CanMoveTo(Vector2Int position)
+        public  GridNavigation GetNavigation()
         {
-            if (!GridOccupation.IsFree(position))
-            {
-                return false;
-            }
-            
-            var gridPositionV3 = new Vector3Int(position.x, position.y, 0);
-            
-            TileBase tile = _tilemap.GetTile(gridPositionV3);
-            TileData tileData = default;
-            tile.GetTileData(gridPositionV3, _tilemap, ref tileData);
-            if (tileData.colliderType == Tile.ColliderType.Grid)
-            {
-                return false;
-            }
-            
-            return true;
+            return _gridNavigation;
         }
-        
 
         public bool MoveTo(Vector2Int position)
         {
-            if (!CanMoveTo(position))
+            if (!_gridNavigation.IsFree(position))
             {
                 return false;
             }
@@ -90,23 +44,23 @@ namespace Core
                                 new Vector3(cellOffset.x, cellOffset.y, 0);
             transform.position = worldLocation;
             
-            if (!GridOccupation.IsFree(gridPosition))
+            if (!_gridNavigation.IsFree(gridPosition))
             {
-                GridOccupation.Free(gridPosition);
+                _gridNavigation.Free(gridPosition);
             }
             
             gridPosition = position;
             
-            GridOccupation.Occupy(gridPosition, gameObject);
+            _gridNavigation.Occupy(gridPosition, gameObject);
             
             return true;
         }
 
-        public bool DeferredGo(GridDirection direction, int distance = 1)
+        public bool DeferredGo(GridHelper.GridDirection direction, int distance = 1)
         {
-            var destLocation = DirectionToLocation(direction, distance);
+            var destLocation = GridHelper.DirectionToLocation(gridPosition, direction, distance);
             
-            if (!CanMoveTo(destLocation))
+            if (!_gridNavigation.IsFree(destLocation))
             {
                 return false;
             }
@@ -123,7 +77,7 @@ namespace Core
             return true;
         }
 
-        public void OrientTo(GridDirection direction)
+        public void OrientTo(GridHelper.GridDirection direction)
         {
             LookAtDirection = direction;
             

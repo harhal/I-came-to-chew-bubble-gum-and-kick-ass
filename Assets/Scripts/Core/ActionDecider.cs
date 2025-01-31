@@ -15,11 +15,11 @@ namespace Core
             Kick
         }
 
-        private event Action<ActionType, GridMovement.GridDirection> onActionDecided;
+        private event Action<ActionType, GridHelper.GridDirection> onActionDecided;
         private event Action onActionReleased;
             
         private ActionType _action;
-        private GridMovement.GridDirection _actionDirection;
+        private GridHelper.GridDirection _actionDirection;
         
         [SerializeField]
         private GameState.GameStage actionStage = GameState.GameStage.PostPlayerActions;
@@ -43,7 +43,7 @@ namespace Core
             _bubbleGumHitProcessor = GetComponent<BubbleGumHitProcessor>();
         }
 
-        public void SubscribeOnDecision(Action<ActionType, GridMovement.GridDirection> onActionDecided)
+        public void SubscribeOnDecision(Action<ActionType, GridHelper.GridDirection> onActionDecided)
         {
             this.onActionDecided += onActionDecided;
         }
@@ -82,7 +82,7 @@ namespace Core
 
             if (_action == ActionType.Move && _kickProcessor)
             {
-                if (!GridOccupation.IsFree(_gridMovement.DirectionToLocation(_actionDirection)))
+                if (!_gridMovement.GetNavigation().IsFree(GridHelper.DirectionToLocation(_gridMovement.gridPosition, _actionDirection)))
                 {
                     _action = ActionType.Kick;
                 }
@@ -95,7 +95,7 @@ namespace Core
                 {
                     if (!_gridMovement.DeferredGo(_actionDirection))
                     {
-                        if (GridOccupation.GetOccupation(_gridMovement.DirectionToLocation(_actionDirection)) == The.Me)
+                        if (_gridMovement.GetNavigation().GetOccupation(GridHelper.DirectionToLocation(_gridMovement.gridPosition, _actionDirection)) == The.Me)
                         {
                             if (_attackProcessor)
                             {
@@ -140,7 +140,7 @@ namespace Core
             }
         }
 
-        public bool SetDesiredAction(ActionType action, GridMovement.GridDirection direction)
+        public bool SetDesiredAction(ActionType action, GridHelper.GridDirection direction)
         {
             _action = action;
             _actionDirection = direction;

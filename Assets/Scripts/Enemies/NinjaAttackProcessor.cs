@@ -1,11 +1,10 @@
 using Core;
-using UnityEngine;
 
 namespace Enemies
 {
     public class NinjaAttackProcessor : AttackProcessor
     {
-        public override void Attack(GridMovement.GridDirection direction)
+        public override void Attack(GridHelper.GridDirection direction)
         {
             GridMovement.OrientTo(direction);
             base.Attack(direction);
@@ -13,9 +12,9 @@ namespace Enemies
 
         public override void AttackHit()
         {
-            var hitCell = GridMovement.DirectionToLocation(GridMovement.LookAtDirection);
+            var hitCell = GridHelper.DirectionToLocation(GridMovement.gridPosition, GridMovement.LookAtDirection);
 
-            var victim = GridOccupation.GetOccupation(hitCell);
+            var victim = GridMovement.GetNavigation().GetOccupation(hitCell);
             if (victim)
             {
                 if (victim != The.Me)

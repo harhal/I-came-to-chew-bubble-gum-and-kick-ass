@@ -33,27 +33,18 @@ namespace Enemies
             GameState.PipelineItemProcessed();
         }
 
-        protected GridMovement.GridDirection FindMoveDirection()
+        protected GridHelper.GridDirection FindRandValidDirection()
         {
-            List<GridMovement.GridDirection> sock = new List<GridMovement.GridDirection>
+            foreach (var direction in GridHelper.FourDirections())
             {
-                GridMovement.GridDirection.North,
-                GridMovement.GridDirection.South,
-                GridMovement.GridDirection.East,
-                GridMovement.GridDirection.West
-            };
-
-            do
-            {
-                var direction = sock[GameState.StableRandomGenerator.NextInt(sock.Count)];
-                Vector2Int nextLocation = GridMovement.DirectionToLocation(direction);
-                if (GridMovement.CanMoveTo(nextLocation))
+                Vector2Int nextLocation = GridHelper.DirectionToLocation(GridMovement.gridPosition, direction);
+                if (GridMovement.GetNavigation().IsFree(nextLocation))
                 {
                     return direction;
                 }
-            } while (sock.Count > 1);
+            }
 
-            return sock[0];
+            return GridHelper.GetRandDirection();
         }
 
         public bool IsAlive()

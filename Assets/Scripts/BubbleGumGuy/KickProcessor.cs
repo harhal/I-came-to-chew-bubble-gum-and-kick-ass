@@ -11,9 +11,9 @@ namespace BubbleGumGuy
         
         private Animator _animator;
         private GridMovement _gridMovement;
-        private GridMovement.GridDirection _actionDirection;
+        private GridHelper.GridDirection _actionDirection;
 
-        private int _activeAnimations = 0;
+        private int _activeAnimations;
 
         void Awake()
         {
@@ -21,7 +21,7 @@ namespace BubbleGumGuy
             _gridMovement = GetComponent<GridMovement>();
         }
 
-        public void Kick(GridMovement.GridDirection actionDirection)
+        public void Kick(GridHelper.GridDirection actionDirection)
         {
             _actionDirection = actionDirection;
             if (_animator)
@@ -34,9 +34,9 @@ namespace BubbleGumGuy
 
         public void KickHit()
         {
-            var hitCell = _gridMovement.DirectionToLocation(_actionDirection);
+            var hitCell = GridHelper.DirectionToLocation(_gridMovement.gridPosition, _actionDirection);
 
-            var victim = GridOccupation.GetOccupation(hitCell);
+            var victim = _gridMovement.GetNavigation().GetOccupation(hitCell);
             if (!victim)
             {
                 //TODO: PlayHitSound

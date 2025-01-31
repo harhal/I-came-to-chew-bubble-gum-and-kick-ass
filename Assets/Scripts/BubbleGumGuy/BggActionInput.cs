@@ -44,12 +44,12 @@ namespace BubbleGumGuy
             {
                 if (inputDirection.x > 0)
                 {
-                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.East);
+                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridHelper.GridDirection.East);
                     GameState.PipelineItemProcessed();
                 }
                 else
                 {
-                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.West);
+                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridHelper.GridDirection.West);
                     GameState.PipelineItemProcessed();
                 }
             }
@@ -57,12 +57,12 @@ namespace BubbleGumGuy
             {
                 if (inputDirection.y > 0)
                 {
-                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.North);
+                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridHelper.GridDirection.North);
                     GameState.PipelineItemProcessed();
                 }
                 else
                 {
-                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridMovement.GridDirection.South);
+                    _actionDecider.SetDesiredAction(ActionDecider.ActionType.Move, GridHelper.GridDirection.South);
                     GameState.PipelineItemProcessed();
                 }
             }
