@@ -15,12 +15,16 @@ namespace Core
             PlayerAction,
             PostPlayerActions,
             AreaCleared,
-            OutOfBubbleGum,
+            Spawn,
             CharacterDead,
             HitProcessing
         }
 
         public static Random StableRandomGenerator = new Random(26122025);
+
+        public static int Turn = 0;
+
+        private const GameStage TurnIncreaseStage = GameStage.Spawn;
 
         public static GameStage CurrentGameStage { get; private set; } = GameStage.Start;
 
@@ -32,13 +36,14 @@ namespace Core
         private static readonly Dictionary<GameStage, GameStage> GameStageTransitions = 
             new Dictionary<GameStage, GameStage>
             {
-                { GameStage.Start, GameStage.Decisionmaking },
+                { GameStage.Start, GameStage.Spawn },
+                { GameStage.Spawn, GameStage.Decisionmaking },
                 { GameStage.Decisionmaking, GameStage.Input },
                 { GameStage.Input, GameStage.PrePlayerActions },
                 { GameStage.PrePlayerActions, GameStage.PlayerAction },
                 { GameStage.PlayerAction, GameStage.PostPlayerActions },
                 { GameStage.PostPlayerActions, GameStage.HitProcessing },
-                { GameStage.HitProcessing, GameStage.Decisionmaking }
+                { GameStage.HitProcessing, GameStage.Spawn }
             };
 
         public static void Reset()
@@ -46,6 +51,7 @@ namespace Core
             CurrentGameStage = GameStage.Start;
             _gameStagePipelines = new Dictionary<GameStage, Queue<IGameStagePipelineItem>>();
             StableRandomGenerator = new Random(26122025);
+            Turn = 0;
         }
 
         public static void RegisterPipelineItem(IGameStagePipelineItem gameStagePipelineItem, GameStage stage)
@@ -69,6 +75,11 @@ namespace Core
                 }
             
                 CurrentGameStage = transition;
+
+                if (CurrentGameStage == TurnIncreaseStage)
+                {
+                    Turn++;
+                }
                 
                 TransferStagePipelineToCurrent(CurrentGameStage);
 

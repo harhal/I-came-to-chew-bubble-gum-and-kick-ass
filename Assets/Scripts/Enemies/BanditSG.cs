@@ -1,3 +1,4 @@
+using Core;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -17,6 +18,12 @@ namespace Enemies
             if (animator)
             {
                 animator.SetBool(SgVarName, bHasSg);
+            }
+
+            var attackProcessor = GetComponent<AttackProcessor>();
+            if (attackProcessor && bHasSg)
+            {
+                attackProcessor.range = 3;
             }
         }
     }

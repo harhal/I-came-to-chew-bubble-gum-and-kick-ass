@@ -105,7 +105,9 @@ namespace Core
                         continue;
                     }
 
-                    if (!gridNavigation.IsFree(nextCell))
+                    bool bIgnoreOccupants = (nextCell - start).magnitude > 3;
+
+                    if (!gridNavigation.IsFree(nextCell, false, bIgnoreOccupants))
                     {
                         continue;
                     }

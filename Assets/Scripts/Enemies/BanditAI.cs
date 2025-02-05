@@ -19,11 +19,15 @@ namespace Enemies
 
         public override void Trigger()
         {
-            if (PlayerGridMovement.gridPosition == GridHelper.DirectionToLocation(GridMovement.gridPosition, GridMovement.LookAtDirection))
+            for (int distance = 1; distance <= _attackProcessor.range; distance++)
             {
-                ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack);
-                base.Trigger();
-                return;
+                if (PlayerGridMovement.gridPosition ==
+                    GridHelper.DirectionToLocation(GridMovement.gridPosition, GridMovement.LookAtDirection, distance))
+                {
+                    ActionDecider.SetDesiredAction(ActionDecider.ActionType.Attack);
+                    base.Trigger();
+                    return;
+                }
             }
 
             if ((PlayerGridMovement.gridPosition - GridMovement.gridPosition).magnitude <= _attackProcessor.range)
@@ -38,10 +42,12 @@ namespace Enemies
             
             var bPlayDumb = GameState.StableRandomGenerator.NextInt(100) < percentToPlayDumb;
 
-            var moveDirection = bPlayDumb
+            var path = GridPathBuilder.FindPath(GridMovement.GetNavigation(), GridMovement.gridPosition,
+                PlayerGridMovement.gridPosition, true);
+                
+            var moveDirection = (bPlayDumb || path == null)
                 ? FindRandValidDirection()
-                : GridPathBuilder.FindPath(GridMovement.GetNavigation(), GridMovement.gridPosition,
-                    PlayerGridMovement.gridPosition, true).GetFirstDirection();
+                : path.GetFirstDirection();
 
             ActionDecider.SetDesiredAction(ActionDecider.ActionType.Move, moveDirection);
             base.Trigger();

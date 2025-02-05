@@ -1,3 +1,4 @@
+using System.Linq;
 using Core;
 using UnityEngine;
 
@@ -24,17 +25,19 @@ namespace Enemies
                 var path = GridPathBuilder.FindPath(GridMovement.GetNavigation(), GridMovement.gridPosition,
                     PlayerGridMovement.gridPosition, true);
                 
-                var chargeDirection = path.GetFirstDirection();
-                
+                GridHelper.GridDirection chargeDirection;
                 int chargeLength = 0;
-                foreach (var direction in path.GetDirections())
+                
+                if (path != null)
                 {
-                    if (direction != chargeDirection)
-                    {
-                        break;
-                    }
-                    
-                    chargeLength++;
+                    chargeDirection = path.GetFirstDirection();
+
+                    chargeLength += path.GetDirections().TakeWhile(direction => direction == chargeDirection).Count();
+                }
+                else
+                {
+                    chargeDirection = GridHelper.GetRandDirection();
+                    chargeLength = 1;
                 }
 
                 GetComponent<NinjaAttackProcessor>().leftCharge = chargeLength;
